@@ -2132,18 +2132,6 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -2181,28 +2169,36 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+// ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "clearEnv": () => (/* binding */ clearEnv)
-/* harmony export */ });
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "clearEnv": () => (/* reexport */ clearEnv)
+});
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(186);
+;// CONCATENATED MODULE: ./src/clear-env.ts
 
 const clearEnv = () => {
     try {
-        const pattern = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pattern');
+        const pattern = core.getInput('pattern');
         const re = new RegExp(pattern);
         Object.keys(process.env)
             .filter((key) => key.match(re))
             .forEach((key) => {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`clear ${key}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable(key, '');
+            core.info(`clear ${key}`);
+            core.exportVariable(key, '');
         });
     }
     catch (error) {
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+        core.setFailed(error.message);
     }
 };
+
+;// CONCATENATED MODULE: ./src/index.ts
+
 
 })();
 
