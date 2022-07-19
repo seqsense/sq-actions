@@ -18,6 +18,8 @@ jobs:
         run: yarn
       - name: Check eslint
         run: yarn lint
+      - name: Typecheck
+        run: yarn typecheck
       - name: Build
         run: yarn build
       - name: Check dist
