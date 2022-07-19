@@ -45,15 +45,13 @@ jobs:
         with:
           ref: ${{ fromJSON(steps.get-ref.outputs.result).ref }}
       - uses: actions/setup-node@v3
-      - uses: actions/cache@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-
+          node-version: 16
+          cache: yarn
       - name: Install
-        run: npm install
+        run: yarn
       - name: Build
-        run: npm run build
+        run: yarn build
       - name: Update
         run: |
           if git diff --exit-code; then
