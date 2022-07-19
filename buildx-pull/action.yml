@@ -58,7 +58,7 @@ runs:
       shell: bash
       run: |
         buildx_opts=
-        for image in ${{ input.images }}; do
+        for image in ${{ inputs.images }}; do
           if docker pull ${image}; then
             cache=localhost:${{ inputs.local-registry-port }}/cache-$(uuidgen -r)
             docker tag ${image} ${cache}
