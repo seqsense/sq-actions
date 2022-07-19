@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import cp from 'child_process'
+import * as cp from 'child_process'
 
 export const dockerRun = () => {
   try {

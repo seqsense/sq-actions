@@ -2132,18 +2132,6 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -2213,7 +2201,6 @@ const clearEnv = () => {
 
 ;// CONCATENATED MODULE: external "child_process"
 const external_child_process_namespaceObject = require("child_process");
-var external_child_process_default = /*#__PURE__*/__nccwpck_require__.n(external_child_process_namespaceObject);
 ;// CONCATENATED MODULE: ./src/docker-run.ts
 
 
@@ -2233,7 +2220,7 @@ const dockerRun = () => {
             return `-p ${parseInt(f[0])}:${parseInt(f[1])}`;
         })
             .join(' ');
-        const containerId = external_child_process_default().execSync(`docker run -d ${ports} ${image}`)
+        const containerId = external_child_process_namespaceObject.execSync(`docker run -d ${ports} ${image}`)
             .toString();
         core.saveState('containerId', containerId);
     }
@@ -2244,7 +2231,7 @@ const dockerRun = () => {
 const dockerRunPost = () => {
     try {
         const containerId = core.getState('containerId');
-        external_child_process_default().execSync(`docker kill ${containerId}`);
+        external_child_process_namespaceObject.execSync(`docker kill ${containerId}`);
     }
     catch (error) {
         core.setFailed(error.message);
