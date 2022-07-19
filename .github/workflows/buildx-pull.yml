@@ -23,7 +23,7 @@ jobs:
             registry.hub.docker.com/library/alpine:3.16
       - name: Check
         env:
-          BUILDX_OPTS:${{ steps.cache.outputs.buildx-opts }}
+          BUILDX_OPTS: ${{ steps.cache.outputs.buildx-opts }}
         run: |
           n=0
           for opt in ${BUILDX_OPTS}; do
