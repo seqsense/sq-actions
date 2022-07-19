@@ -2174,7 +2174,9 @@ __nccwpck_require__.r(__webpack_exports__);
 
 // EXPORTS
 __nccwpck_require__.d(__webpack_exports__, {
-  "clearEnv": () => (/* reexport */ clearEnv)
+  "clearEnv": () => (/* reexport */ clearEnv),
+  "dockerRun": () => (/* reexport */ dockerRun),
+  "dockerRunPost": () => (/* reexport */ dockerRunPost)
 });
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
@@ -2197,7 +2199,47 @@ const clearEnv = () => {
     }
 };
 
+;// CONCATENATED MODULE: external "child_process"
+const external_child_process_namespaceObject = require("child_process");
+;// CONCATENATED MODULE: ./src/docker-run.ts
+
+
+const dockerRun = () => {
+    try {
+        const image = core.getInput('image');
+        const imageRegex = new RegExp('^[a-zA-Z0-9-./]+:[a-zA-Z0-9-]+$');
+        if (!imageRegex.test(image)) {
+            core.setFailed(`invalid image tag: ${image}`);
+            return;
+        }
+        const ports = core.getInput('ports')
+            .trim()
+            .split(/\s/)
+            .map((p) => {
+            const f = p.split(':');
+            return `-p ${parseInt(f[0])}:${parseInt(f[1])}`;
+        })
+            .join(' ');
+        const containerId = external_child_process_namespaceObject.execSync(`docker run -d ${ports} ${image}`)
+            .toString();
+        core.saveState('containerId', containerId);
+    }
+    catch (error) {
+        core.setFailed(error.message);
+    }
+};
+const dockerRunPost = () => {
+    try {
+        const containerId = core.getState('containerId');
+        external_child_process_namespaceObject.execSync(`docker kill ${containerId}`);
+    }
+    catch (error) {
+        core.setFailed(error.message);
+    }
+};
+
 ;// CONCATENATED MODULE: ./src/index.ts
+
 
 
 })();
