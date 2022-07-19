@@ -26,7 +26,10 @@ jobs:
           echo ${{ steps.cache.outputs.buildx-opts }}
           n=0
           for opt in ${{ steps.cache.outputs.buildx-opts }}; do
-            docker pull ${opt}
+            if ! [[ ${opt} == --cache-from=localhost:5000/cache-* ]]; then
+              echo "Wrong format of option" >&2
+              exit 1
+            fi
             n=($n + 1)
           done
           test ${n} -eq 2
