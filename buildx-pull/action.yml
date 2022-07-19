@@ -27,12 +27,14 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
+          let error = false
           ;[
             'images',
           ].forEach((key) => {
             const val = core.getInput(key).trim()
             if (!/^[a-zA-Z0-9.\/:\s]+$/.test(val)) {
-              throw `${key} must be list of strings: ${val}`
+              error = true
+              core.error(`${key} must be list of strings: ${val}`)
             }
           })
           ;[
@@ -41,7 +43,8 @@ runs:
           ].forEach((key) => {
             const val = core.getInput(key)
             if (!/^[0-9]+$/.test(val)) {
-              throw `${key} must be integer: ${val}`
+              error = true
+              core.error(`${key} must be integer: ${val}`)
             }
           })
           ;[
@@ -49,9 +52,13 @@ runs:
           ].forEach((key) => {
             const val = core.getInput(key)
             if (val !== 'true' && val !== 'false') {
-              throw `${key} must be boolean: ${val}`
+              error = true
+              core.error(`${key} must be boolean: ${val}`)
             }
           })
+          if (error) {
+            throw 'validation error'
+          }
     - name: Start local registry
       shell: bash
       run: docker run -d -p ${{ inputs.local-registry-port }}:5000 --restart=always registry:${{ inputs.local-registry-image-tag }}
