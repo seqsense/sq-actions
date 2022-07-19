@@ -9,5 +9,5 @@ inputs:
 
 runs:
   using: node16
-  main: ../dist/docker-run.js
-  post: ../dist/docker-run.post.js
+  main: ../../dist/docker-run.js
+  post: ../../dist/docker-run.post.js
