@@ -30,24 +30,26 @@ runs:
           ;[
             'images',
           ].forEach((key) => {
-            if (!/^[a-zA-Z0-9.\/:\s]+$/.test(core.getInput(key).trim())) {
-              throw `${key} must be list of strings`
+            const val = core.getInput(key).trim()
+            if (!/^[a-zA-Z0-9.\/:\s]+$/.test(val)) {
+              throw `${key} must be list of strings: ${val}`
             }
           })
           ;[
             'local-registry-port',
             'local-registry-image-tag',
           ].forEach((key) => {
-            if (!/^[0-9]+$/.test(core.getInput(key))) {
-              throw `${key} must be integer`
+            const val = core.getInput(key)
+            if (!/^[0-9]+$/.test(val)) {
+              throw `${key} must be integer: ${val}`
             }
           })
           ;[
             'continue-on-pull-error',
           ].forEach((key) => {
-            const val = core.getInput(key).match(/^[0-9]+$/)
+            const val = core.getInput(key)
             if (val !== 'true' && val !== 'false') {
-              throw `${key} must be boolean`
+              throw `${key} must be boolean: ${val}`
             }
           })
     - name: Start local registry
