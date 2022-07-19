@@ -28,6 +28,21 @@ runs:
       with:
         script: |
           [
+            'images',
+          ].forEach((key) => {
+            if (!core.getInput(key).match(/^[a-zA-Z0-9./:\s]+$/)) {
+              throw `${key} must be list of strings`
+            }
+          })
+          [
+            'local-registry-port',
+            'local-registry-image-tag',
+          ].forEach((key) => {
+            if (!core.getInput(key).match(/^[0-9]+$/)) {
+              throw `${key} must be integer`
+            }
+          })
+          [
             'continue-on-pull-error',
           ].forEach((key) => {
             const val = core.getInput(key).match(/^[0-9]+$/)
