@@ -30,7 +30,7 @@ runs:
           ;[
             'images',
           ].forEach((key) => {
-            if (!core.getInput(key).match(/^[a-zA-Z0-9.\/:\s]+$/)) {
+            if (!/^[a-zA-Z0-9.\/:\s]+$/.test(core.getInput(key))) {
               throw `${key} must be list of strings`
             }
           })
@@ -38,7 +38,7 @@ runs:
             'local-registry-port',
             'local-registry-image-tag',
           ].forEach((key) => {
-            if (!core.getInput(key).match(/^[0-9]+$/)) {
+            if (!/^[0-9]+$/.test(core.getInput(key))) {
               throw `${key} must be integer`
             }
           })
