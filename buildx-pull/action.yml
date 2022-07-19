@@ -27,14 +27,14 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
-          [
+          ;[
             'images',
           ].forEach((key) => {
             if (!core.getInput(key).match(/^[a-zA-Z0-9./:\s]+$/)) {
               throw `${key} must be list of strings`
             }
           })
-          [
+          ;[
             'local-registry-port',
             'local-registry-image-tag',
           ].forEach((key) => {
@@ -42,11 +42,11 @@ runs:
               throw `${key} must be integer`
             }
           })
-          [
+          ;[
             'continue-on-pull-error',
           ].forEach((key) => {
             const val = core.getInput(key).match(/^[0-9]+$/)
-            if (val !== 'true' || val !== 'false') {
+            if (val !== 'true' && val !== 'false') {
               throw `${key} must be boolean`
             }
           })
