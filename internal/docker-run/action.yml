@@ -1,0 +1,13 @@
+name: Docker run (for repository internal use)
+description: Run in background and kill later
+inputs:
+  image:
+    description: Image tag
+    required: true
+  ports:
+    description: Ports (host:container ...)
+
+runs:
+  using: node16
+  main: ../dist/docker-run.js
+  post: ../dist/docker-run.post.js

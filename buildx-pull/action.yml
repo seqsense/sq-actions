@@ -62,8 +62,10 @@ runs:
             throw 'validation error'
           }
     - name: Start local registry
-      shell: bash
-      run: docker run -d -p ${{ inputs.local-registry-port }}:5000 --restart=always registry:${{ inputs.local-registry-image-tag }}
+      uses: seqsense/sq-actions/internal/docker-run@add-buildx-pull-action
+      with:
+        ports: ${{ inputs.local-registry-port }}:5000
+        image: registry:${{ inputs.local-registry-image-tag }}
     - name: Pull images
       id: pull
       shell: bash
