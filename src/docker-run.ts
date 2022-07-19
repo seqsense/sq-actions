@@ -4,7 +4,7 @@ import cp from 'child_process'
 export const dockerRun = () => {
   try {
     const image = core.getInput('image')
-    const imageRegex = new RegExp('^[a-zA-Z0-9-./]+/[a-zA-Z0-9-]+$')
+    const imageRegex = new RegExp('^[a-zA-Z0-9-./]+:[a-zA-Z0-9-]+$')
     if (!imageRegex.test(image)) {
       core.setFailed(`invalid image tag: ${image}`)
       return
