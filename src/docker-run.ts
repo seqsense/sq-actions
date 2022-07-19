@@ -14,9 +14,10 @@ export const dockerRun = () => {
       .getInput('ports')
       .trim()
       .split(/\s/)
-      .map((p) =>
-        p.split(':').map((p) => `-p ${parseInt(p[0])}:${parseInt(p[1])}`),
-      )
+      .map((p) => {
+        const f = p.split(':')
+        return `-p ${parseInt(f[0])}:${parseInt(f[1])}`
+      })
       .join(' ')
 
     const containerId = cp.execSync(`docker run -d ${ports} ${image}`)

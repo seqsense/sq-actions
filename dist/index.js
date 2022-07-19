@@ -2228,7 +2228,10 @@ const dockerRun = () => {
         const ports = core.getInput('ports')
             .trim()
             .split(/\s/)
-            .map((p) => p.split(':').map((p) => `-p ${parseInt(p[0])}:${parseInt(p[1])}`))
+            .map((p) => {
+            const f = p.split(':');
+            return `-p ${parseInt(f[0])}:${parseInt(f[1])}`;
+        })
             .join(' ');
         const containerId = external_child_process_default().execSync(`docker run -d ${ports} ${image}`);
         core.saveState('containerId', containerId);
