@@ -20,7 +20,9 @@ export const dockerRun = () => {
       })
       .join(' ')
 
-    const containerId = cp.execSync(`docker run -d ${ports} ${image}`)
+    const containerId = cp
+      .execSync(`docker run -d ${ports} ${image}`)
+      .toString()
     core.saveState('containerId', containerId)
   } catch (error) {
     core.setFailed(error.message)

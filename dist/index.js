@@ -2233,7 +2233,8 @@ const dockerRun = () => {
             return `-p ${parseInt(f[0])}:${parseInt(f[1])}`;
         })
             .join(' ');
-        const containerId = external_child_process_default().execSync(`docker run -d ${ports} ${image}`);
+        const containerId = external_child_process_default().execSync(`docker run -d ${ports} ${image}`)
+            .toString();
         core.saveState('containerId', containerId);
     }
     catch (error) {
