@@ -30,7 +30,7 @@ runs:
           ;[
             'images',
           ].forEach((key) => {
-            if (!/^[a-zA-Z0-9.\/:\s]+$/.test(core.getInput(key))) {
+            if (!/^[a-zA-Z0-9.\/:\s]+$/.test(core.getInput(key).trim())) {
               throw `${key} must be list of strings`
             }
           })
