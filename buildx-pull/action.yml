@@ -80,3 +80,4 @@ runs:
           fi
         done
         echo "::set-output name=buildx-opts::${buildx_opts}"
+        echo "${buildx_opts}"

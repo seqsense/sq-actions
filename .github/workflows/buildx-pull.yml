@@ -23,9 +23,9 @@ jobs:
             registry.hub.docker.com/library/alpine:3.16
       - name: Check
         run: |
-          echo ${{ steps.cache.outputs.buildx-cache }}
+          echo ${{ steps.cache.outputs.buildx-opts }}
           n=0
-          for opt in ${{ steps.cache.outputs.buildx-cache }}; do
+          for opt in ${{ steps.cache.outputs.buildx-opts }}; do
             docker pull ${opt}
             n=($n + 1)
           done
