@@ -51,9 +51,11 @@ runs:
             }
           }
     - name: Start local registry
+      shell: bash
       run: docker run -d -p ${{ inputs.local-registry-port }}:5000 --restart=always registry:${{ inputs.local-registry-image-tag }}
     - name: Pull images
       id: pull
+      shell: bash
       run: |
         buildx_opts=
         for image in ${{ input.images }}; do
