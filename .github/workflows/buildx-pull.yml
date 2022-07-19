@@ -1,0 +1,32 @@
+name: buildx-pull
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Buildx pull
+        id: cache
+        uses: ./buildx-pull/
+        with:
+          images: |
+            registry.hub.docker.com/library/alpine:3.15
+            registry.hub.docker.com/library/alpine:3.16
+      - name: Check
+        run: |
+          echo ${{ steps.cache.outputs.buildx-cache }}
+          n=0
+          for opt in ${{ steps.cache.outputs.buildx-cache }}; do
+            docker pull ${opt}
+            n=($n + 1)
+          done
+          test ${n} -eq 2

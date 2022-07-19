@@ -1,0 +1,67 @@
+name: Pull images for docker buildx cache
+description: Start local docker registry and push cache images
+inputs:
+  images:
+    description: Space separated image list
+    required: true
+  local-registry-port:
+    description: Local docker registry port
+    required: true
+    default: 5000
+  local-registry-image-tag:
+    description: Local docker registry image tag
+    required: true
+    default: 2
+  continue-on-pull-error:
+    description: Continue on docker pull error (true/false)
+    required: true
+    default: true
+outputs:
+  buildx-opts:
+    description: Docker builx options to use images as cache
+    value: ${{ steps.pull.outputs.buildx-opts }}
+runs:
+  using: composite
+  steps:
+    - name: Validate inputs
+      uses: actions/github-script@v6
+      with:
+        script: |
+          [
+            'images',
+          ].forEach((key) => {
+            if (!core.getInput(key).match(/^[a-zA-Z0-9./:\s]+$/)) {
+              throw `${key} must be list of strings`
+            }
+          }
+          [
+            'local-registry-port',
+            'local-registry-image-tag',
+          ].forEach((key) => {
+            if (!core.getInput(key).match(/^[0-9]+$/)) {
+              throw `${key} must be integer`
+            }
+          }
+          [
+            'continue-on-pull-error',
+          ].forEach((key) => {
+            const val = core.getInput(key).match(/^[0-9]+$/)
+            if (val !== 'true' || val !== 'false') {
+              throw `${key} must be boolean`
+            }
+          }
+    - name: Start local registry
+      run: docker run -d -p ${{ inputs.local-registry-port }}:5000 --restart=always registry:${{ inputs.local-registry-image-tag }}
+    - name: Pull images
+      id: pull
+      run: |
+        buildx_opts=
+        for image in ${{ input.images }}; do
+          if docker pull ${image}; then
+            cache=localhost:${{ inputs.local-registry-port }}/cache-$(uuidgen -r)
+            docker tag ${image} ${cache}
+            docker push ${cache}
+            buildx_opts="${buildx_opts} --cache-from=${cache}"
+          fi
+        done
+        echo "::set-output name=buildx-opts::${buildx_opts}"
