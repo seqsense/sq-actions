@@ -2132,6 +2132,18 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -2174,7 +2186,9 @@ __nccwpck_require__.r(__webpack_exports__);
 
 // EXPORTS
 __nccwpck_require__.d(__webpack_exports__, {
-  "clearEnv": () => (/* reexport */ clearEnv)
+  "clearEnv": () => (/* reexport */ clearEnv),
+  "dockerRun": () => (/* reexport */ dockerRun),
+  "dockerRunPost": () => (/* reexport */ dockerRunPost)
 });
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
@@ -2197,7 +2211,48 @@ const clearEnv = () => {
     }
 };
 
+;// CONCATENATED MODULE: external "child_process"
+const external_child_process_namespaceObject = require("child_process");
+var external_child_process_default = /*#__PURE__*/__nccwpck_require__.n(external_child_process_namespaceObject);
+;// CONCATENATED MODULE: ./src/docker-run.ts
+
+
+const dockerRun = () => {
+    try {
+        const image = core.getInput('image');
+        const imageRegex = new RegExp('^[a-zA-Z0-9-./]+:[a-zA-Z0-9-]+$');
+        if (!imageRegex.test(image)) {
+            core.setFailed(`invalid image tag: ${image}`);
+            return;
+        }
+        const ports = core.getInput('ports')
+            .trim()
+            .split(/\s/)
+            .map((p) => {
+            const f = p.split(':');
+            return `-p ${parseInt(f[0])}:${parseInt(f[1])}`;
+        })
+            .join(' ');
+        const containerId = external_child_process_default().execSync(`docker run -d ${ports} ${image}`)
+            .toString();
+        core.saveState('containerId', containerId);
+    }
+    catch (error) {
+        core.setFailed(error.message);
+    }
+};
+const dockerRunPost = () => {
+    try {
+        const containerId = core.getState('containerId');
+        external_child_process_default().execSync(`docker kill ${containerId}`);
+    }
+    catch (error) {
+        core.setFailed(error.message);
+    }
+};
+
 ;// CONCATENATED MODULE: ./src/index.ts
+
 
 
 })();
