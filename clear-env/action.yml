@@ -1,0 +1,9 @@
+name: 'Clear environment variables'
+description: 'Clear environment variables matched to the pattern'
+inputs:
+  pattern:
+    description: 'Regexp pattern of the environment variables'
+    required: true
+runs:
+  using: 'node16'
+  main: '../dist/clear-env.js'
