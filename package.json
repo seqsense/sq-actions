@@ -2,7 +2,7 @@
   "name": "sq-actions",
   "description": "GitHub Actions for SEQSENSE CI",
   "scripts": {
-    "build": "ncc build src/*.ts",
+    "build": "ncc build src/index.ts",
     "fmt": "prettier --write src/*.ts",
     "lint": "eslint \"./src/*.ts\"",
     "typecheck": "tsc"
