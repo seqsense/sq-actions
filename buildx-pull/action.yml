@@ -67,9 +67,11 @@ runs:
     - name: Pull images
       id: pull
       shell: bash
+      env:
+        IMAGES: ${{ inputs.images }}
       run: |
         buildx_opts=
-        for image in ${{ inputs.images }}; do
+        for image in ${IMAGES}; do
           if docker pull ${image}; then
             cache=localhost:${{ inputs.local-registry-port }}/cache-$(uuidgen -r)
             docker tag ${image} ${cache}
