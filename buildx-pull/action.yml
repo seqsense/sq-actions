@@ -25,35 +25,37 @@ runs:
   steps:
     - name: Validate inputs
       uses: actions/github-script@v6
+      env:
+        IMAGES: ${{ inputs.images }}
+        LOCAL_REGISTRY_PORT: ${{ inputs.local-registry-port }}
+        LOCAL_REGISTRY_IMAGE_TAG: ${{ inputs.local-registry-image-tag }}
+        CONTINUE_ON_PULL_ERROR: ${{ inputs.continue-on-pull-error }}
       with:
         script: |
           let error = false
           ;[
-            'images',
-          ].forEach((key) => {
-            const val = core.getInput(key).trim()
+            process.env.IMAGES,
+          ].forEach((val) => {
             if (!/^[a-zA-Z0-9.\/:\s]+$/.test(val)) {
               error = true
-              core.error(`${key} must be list of strings: ${val}`)
+              core.error(`must be list of strings: ${val}`)
             }
           })
           ;[
-            'local-registry-port',
-            'local-registry-image-tag',
-          ].forEach((key) => {
-            const val = core.getInput(key)
+            process.env.LOCAL_REGISTRY_PORT,
+            process.env.LOCAL_REGISTRY_IMAGE_TAG,
+          ].forEach((val) => {
             if (!/^[0-9]+$/.test(val)) {
               error = true
-              core.error(`${key} must be integer: ${val}`)
+              core.error(`must be integer: ${val}`)
             }
           })
           ;[
-            'continue-on-pull-error',
-          ].forEach((key) => {
-            const val = core.getInput(key)
+            process.env.CONTINUE_ON_PULL_ERROR,
+          ].forEach((val) => {
             if (val !== 'true' && val !== 'false') {
               error = true
-              core.error(`${key} must be boolean: ${val}`)
+              core.error(`must be boolean: ${val}`)
             }
           })
           if (error) {
