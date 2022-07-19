@@ -32,6 +32,6 @@ jobs:
               echo "Wrong format" >&2
               exit 1
             fi
-            n=($n + 1)
+            n=$((n + 1))
           done
           test ${n} -eq 2
