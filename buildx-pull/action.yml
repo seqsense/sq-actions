@@ -33,7 +33,7 @@ runs:
             if (!core.getInput(key).match(/^[a-zA-Z0-9./:\s]+$/)) {
               throw `${key} must be list of strings`
             }
-          }
+          })
           [
             'local-registry-port',
             'local-registry-image-tag',
@@ -41,7 +41,7 @@ runs:
             if (!core.getInput(key).match(/^[0-9]+$/)) {
               throw `${key} must be integer`
             }
-          }
+          })
           [
             'continue-on-pull-error',
           ].forEach((key) => {
@@ -49,7 +49,7 @@ runs:
             if (val !== 'true' || val !== 'false') {
               throw `${key} must be boolean`
             }
-          }
+          })
     - name: Start local registry
       shell: bash
       run: docker run -d -p ${{ inputs.local-registry-port }}:5000 --restart=always registry:${{ inputs.local-registry-image-tag }}
