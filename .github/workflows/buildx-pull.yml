@@ -32,6 +32,8 @@ jobs:
               echo "Wrong format" >&2
               exit 1
             fi
+            image=$(echo "${opt}" | sed 's/^--cache-from=//')
+            docker pull ${image}
             n=$((n + 1))
           done
           test ${n} -eq 2
