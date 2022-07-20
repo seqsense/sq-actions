@@ -1,0 +1,85 @@
+name: Pull images for docker buildx cache
+description: Start local docker registry and push cache images
+inputs:
+  images:
+    description: Space separated image list
+    required: true
+  local-registry-port:
+    description: Local docker registry port
+    required: true
+    default: 5000
+  local-registry-image-tag:
+    description: Local docker registry image tag
+    required: true
+    default: 2
+  continue-on-pull-error:
+    description: Continue on docker pull error (true/false)
+    required: true
+    default: true
+outputs:
+  buildx-opts:
+    description: Docker builx options to use images as cache
+    value: ${{ steps.pull.outputs.buildx-opts }}
+runs:
+  using: composite
+  steps:
+    - name: Validate inputs
+      uses: actions/github-script@v6
+      env:
+        IMAGES: ${{ inputs.images }}
+        LOCAL_REGISTRY_PORT: ${{ inputs.local-registry-port }}
+        LOCAL_REGISTRY_IMAGE_TAG: ${{ inputs.local-registry-image-tag }}
+        CONTINUE_ON_PULL_ERROR: ${{ inputs.continue-on-pull-error }}
+      with:
+        script: |
+          let error = false
+          ;[
+            process.env.IMAGES,
+          ].forEach((val) => {
+            if (!/^[-a-zA-Z0-9.\/:\s]+$/.test(val)) {
+              error = true
+              core.error(`must be list of strings: ${val}`)
+            }
+          })
+          ;[
+            process.env.LOCAL_REGISTRY_PORT,
+            process.env.LOCAL_REGISTRY_IMAGE_TAG,
+          ].forEach((val) => {
+            if (!/^[0-9]+$/.test(val)) {
+              error = true
+              core.error(`must be integer: ${val}`)
+            }
+          })
+          ;[
+            process.env.CONTINUE_ON_PULL_ERROR,
+          ].forEach((val) => {
+            if (val !== 'true' && val !== 'false') {
+              error = true
+              core.error(`must be boolean: ${val}`)
+            }
+          })
+          if (error) {
+            throw 'validation error'
+          }
+    - name: Start local registry
+      uses: seqsense/sq-actions/internal/docker-run@main
+      with:
+        ports: ${{ inputs.local-registry-port }}:5000
+        image: registry:${{ inputs.local-registry-image-tag }}
+    - name: Pull images
+      id: pull
+      shell: bash
+      env:
+        IMAGES: ${{ inputs.images }}
+      run: |
+        buildx_opts=
+        for image in ${IMAGES}; do
+          if docker pull ${image}; then
+            cache=localhost:${{ inputs.local-registry-port }}/cache-$(uuidgen -r)
+            docker tag ${image} ${cache}
+            docker push ${cache}
+            buildx_opts="${buildx_opts} --cache-from=${cache}"
+          fi
+        done
+        echo "::set-output name=buildx-opts::${buildx_opts}"
+        echo "${buildx_opts}"

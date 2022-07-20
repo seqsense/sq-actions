@@ -1,0 +1,39 @@
+name: buildx-pull
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Buildx pull
+        id: cache
+        uses: ./buildx-pull/
+        with:
+          images: |
+            registry.hub.docker.com/library/alpine:3.15
+            registry.hub.docker.com/library/alpine:3.16
+      - name: Check
+        env:
+          BUILDX_OPTS: ${{ steps.cache.outputs.buildx-opts }}
+        run: |
+          n=0
+          for opt in ${BUILDX_OPTS}; do
+            echo "image: ${opt}"
+            if ! [[ ${opt} == --cache-from=localhost:5000/cache-* ]]; then
+              echo "Wrong format" >&2
+              exit 1
+            fi
+            image=$(echo "${opt}" | sed 's/^--cache-from=//')
+            docker pull ${image}
+            n=$((n + 1))
+          done
+          test ${n} -eq 2
