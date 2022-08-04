@@ -74,7 +74,7 @@ runs:
     - name: Output body as file
       uses: actions/github-script@v6
       with:
-        script: fs.writeFileSync('/tmp/body.txt', process.env('BODY'))
+        script: require('fs').writeFileSync('/tmp/body.txt', process.env('BODY'))
     - name: Open PR
       shell: bash
       run: |
