@@ -38,4 +38,3 @@ jobs:
           pr-title: Update PR test
           source-branch: ci/update-pr/head
           destination-branch: ci/update-pr/base
-          asignee-team-slug: '@seqsense/dummy-team-for-ci'
