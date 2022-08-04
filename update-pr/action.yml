@@ -31,9 +31,9 @@ runs:
           ;[
             process.env.PR_TITLE,
           ].forEach((val) => {
-            if (!/^[^']+$/.test(val)) {
+            if (!/^[^'\\]+$/.test(val)) {
               error = true
-              core.error(`must not contain single quote: ${val}`)
+              core.error(`must not contain single quote nor backslash: ${val}`)
             }
           })
           ;[
