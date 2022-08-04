@@ -46,7 +46,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           body=$(gh pr view ci/update-pr/head --json body | jq .body)
-          test ${body} = '"* #1\n* #2"'
+          echo "${body}"
+          test "${body}" = '"* #1\n* #2"'
       - name: Cleanup
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
