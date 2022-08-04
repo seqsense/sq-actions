@@ -28,7 +28,8 @@ jobs:
           git commit -m "Test commit B" --allow-empty
           git checkout ci/update-pr/head
           git merge -m "Merge pull request #2 from ci/update-pr/merged"
-          git push -f origin ci/update-pr/base ci/update-pr/head
+          git push -f origin ci/update-pr/base
+          git push -f origin ci/update-pr/head
       - name: Update PR
         uses: ./update-pr/
         with:
