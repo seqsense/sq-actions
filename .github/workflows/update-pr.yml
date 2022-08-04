@@ -42,10 +42,14 @@ jobs:
           source-branch: ci/update-pr/head
           destination-branch: ci/update-pr/base
       - name: Check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           body=$(gh pr view ci/update-pr/head --json body | jq .body)
           test ${body} = '"* #1\n* #2"'
       - name: Cleanup
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr close ci/update-pr/head
           git push origin --delete ci/update-pr/head
