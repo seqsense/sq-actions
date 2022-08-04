@@ -40,7 +40,7 @@ runs:
             process.env.SOURCE_BRANCH,
             process.env.DESTINATION_BRANCH,
           ].forEach((val) => {
-            if (!/^[a-zA-Z0-9\.-_/]+$/.test(val)) {
+            if (!/^[a-zA-Z0-9.\-_/]+$/.test(val)) {
               error = true
               core.error(`must be branch name: ${val}`)
             }
