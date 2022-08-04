@@ -77,7 +77,7 @@ runs:
         script: |
           const fs = require('fs')
           const process = require('process')
-          fs.writeFileSync('/tmp/body.txt', process.env('BODY'))
+          fs.writeFileSync('/tmp/body.txt', process.env.BODY)
     - name: Open PR
       shell: bash
       run: |
