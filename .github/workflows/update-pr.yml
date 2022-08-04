@@ -16,8 +16,8 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ci/update-pr/root
+      - name: Copy current version of action to tmpdir
+        run: cp -r ./update-pr /tmp/update-pr
       - name: Setup fixtures
         run: |
           git config --global user.email "30003564+sqbot@users.noreply.github.com"
@@ -33,7 +33,7 @@ jobs:
           git merge -m "Merge pull request #2 from ci/update-pr/merged" ci/update-pr/base
           git push -f origin ci/update-pr/base ci/update-pr/head
       - name: Update PR
-        uses: ./update-pr/
+        uses: /tmp/update-pr
         with:
           pr-title: Update PR test
           source-branch: ci/update-pr/head
