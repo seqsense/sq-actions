@@ -1,0 +1,40 @@
+name: update-pr
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: refs/remotes/origin/${{ inputs.source-branch }}
+          fetch-depth: 0
+      - name: Setup fixtures
+        run: |
+          git checkout --orphan ci/update-pr/base
+          git commit -m "Initial commit"
+          git checkout -b ci/update-pr/head
+          git commit -m "Test commit A (#1)"
+          git checkout -b ci/update-pr/merged
+          git commit -m "Test commit B"
+          git checkout ci/update-pr/head
+          git merge -m "Merge pull request #2 from ci/update-pr/merged"
+          git push -f ci/update-pr/base ci/update-pr/head
+      - name: Update PR
+        uses: ./update-pr/
+        with:
+          pr-title: Update PR test
+          source-branch: ci/update-pr/head
+          destination-branch: ci/update-pr/base
+          asignee-team-slug: @seqsense/dummy-team-for-ci
+          github-token: ${{ secrets.GITHUB_TOKEN }}

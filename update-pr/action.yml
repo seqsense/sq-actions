@@ -1,0 +1,87 @@
+name: Update or create PR
+description: Update or create PR with feature list and assignee by team
+inputs:
+  pr-title:
+    description: Title of PR (can't use single quote)
+    required: true
+  source-branch:
+    description: Source branch of PR
+    required: true
+  destination-branch:
+    description: Destination branch of PR
+    required: true
+  asignee-team-slug:
+    description: GitHub team to be assigned
+secrets:
+  github-token:
+    description: GitHub token used to open PR
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Validate inputs
+      uses: actions/github-script@v6
+      env:
+        PR_TITLE: ${{ inputs.pr-title }}
+        SOURCE_BRANCH: ${{ inputs.source-branch }}
+        DESTINATION_BRANCH: ${{ inputs.destination-branch }}
+      with:
+        script: |
+          let error = false
+          ;[
+            process.env.PR_TITLE,
+          ].forEach((val) => {
+            if (!/^[^']+$/.test(val)) {
+              error = true
+              core.error(`must not contain single quote: ${val}`)
+            }
+          })
+          ;[
+            process.env.SOURCE_BRANCH,
+            process.env.DESTINATION_BRANCH,
+          ].forEach((val) => {
+            if (!/^[a-zA-Z0-9\.-_/]+$/.test(val)) {
+              error = true
+              core.error(`must be branch name: ${val}`)
+            }
+          })
+          if (error) {
+            throw 'validation error'
+          }
+    - uses: seqsense/extract-pr-titles-action@v0
+      id: description
+      with:
+        from: origin/${{ inputs.destination-branch }}
+        to: origin/${{ inputs.source-branch }}
+        format: "* #{number}"
+        reverse: true
+    - uses: actions/github-script@v6
+      if: inputs.asignee-team-slug
+      id: assignees
+      with:
+        result-encoding: string
+        github-token: ${{ secrets.SQBOT_GITHUB_TOKEN }}
+        script: |
+          const members = await github.rest.teams.listMembersInOrg({
+            org: context.repo.owner,
+            team_slug: '${{ inputs.asignee-team-slug }}',
+          })
+          return members.data.reduce((acc, v) => {
+            acc.push(`--assignee ${v.login}`)
+            return acc
+          }, []).join(' ')
+    - name: Open PR
+      run: |
+        gh pr create --title '${{ inputs.pr-title }}' \
+            --base ${{ inputs.destination-branch }} \
+            --head ${{ inputs.source-branch }} \
+            ${{ steps.assignees.outputs.result }} \
+          || true
+      env:
+        GITHUB_TOKEN: ${{ secrets.github_token }}
+    - name: update-pull-request-description
+      uses: kt3k/update-pr-description@v1
+      with:
+        github_token: ${{ secrets.github_token }}
+        pr_body: ${{ steps.description.outputs.titles }}
+        destination_branch: ${{ inputs.destination-branch }}
