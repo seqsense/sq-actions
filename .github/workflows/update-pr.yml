@@ -41,3 +41,12 @@ jobs:
           pr-title: Update PR test
           source-branch: ci/update-pr/head
           destination-branch: ci/update-pr/base
+      - name: Check
+        run: |
+          body=$(gh pr view ci/update-pr/head --json body | jq .body)
+          test ${body} = '"* #1\n* #2"'
+      - name: Cleanup
+        run: |
+          gh pr close ci/update-pr/head
+          git push origin --delete ci/update-pr/head
+          git push origin --delete ci/update-pr/base
