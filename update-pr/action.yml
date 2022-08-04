@@ -55,7 +55,8 @@ runs:
         to: origin/${{ inputs.source-branch }}
         format: "* #{number}"
         reverse: true
-    - uses: actions/github-script@v6
+    - name: List team member
+      uses: actions/github-script@v6
       if: inputs.asignee-team-slug
       id: assignees
       with:
@@ -70,21 +71,27 @@ runs:
             acc.push(`--assignee ${v.login}`)
             return acc
           }, []).join(' ')
+    - name: Output body as file
+      uses: actions/github-script@v6
+      with:
+        script: fs.writeFileSync('/tmp/body.txt', process.env('BODY'))
     - name: Open PR
       shell: bash
       run: |
         gh pr create \
             --title '${{ inputs.pr-title }}' \
-            --body '' \
+            --body-file /tmp/body.txt \
             --base ${{ inputs.destination-branch }} \
             --head ${{ inputs.source-branch }} \
             ${{ steps.assignees.outputs.result }} \
           || true
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
-    - name: update-pull-request-description
-      uses: kt3k/update-pr-description@v1
-      with:
-        github_token: ${{ inputs.github-token }}
-        pr_body: ${{ steps.description.outputs.titles }}
-        destination_branch: ${{ inputs.destination-branch }}
+    - name: Update PR body
+      shell: bash
+      run: |
+        gh pr edit \
+            ${{ inputs.destination-branch }} \
+            --body-file /tmp/body.txt
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
