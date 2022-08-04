@@ -12,9 +12,9 @@ inputs:
     required: true
   asignee-team-slug:
     description: GitHub team to be assigned
-secrets:
   github-token:
     description: GitHub token used to open PR
+    default: ${{ github.token }}
     required: true
 runs:
   using: composite

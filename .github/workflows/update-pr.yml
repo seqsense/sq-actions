@@ -39,4 +39,3 @@ jobs:
           source-branch: ci/update-pr/head
           destination-branch: ci/update-pr/base
           asignee-team-slug: '@seqsense/dummy-team-for-ci'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
