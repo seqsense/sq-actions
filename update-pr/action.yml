@@ -60,7 +60,7 @@ runs:
       id: assignees
       with:
         result-encoding: string
-        github-token: ${{ secrets.SQBOT_GITHUB_TOKEN }}
+        github-token: ${{ inputs.github_token }}
         script: |
           const members = await github.rest.teams.listMembersInOrg({
             org: context.repo.owner,
@@ -71,6 +71,7 @@ runs:
             return acc
           }, []).join(' ')
     - name: Open PR
+      shell: bash
       run: |
         gh pr create --title '${{ inputs.pr-title }}' \
             --base ${{ inputs.destination-branch }} \
@@ -78,10 +79,10 @@ runs:
             ${{ steps.assignees.outputs.result }} \
           || true
       env:
-        GITHUB_TOKEN: ${{ secrets.github_token }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
     - name: update-pull-request-description
       uses: kt3k/update-pr-description@v1
       with:
-        github_token: ${{ secrets.github_token }}
+        github_token: ${{ inputs.github_token }}
         pr_body: ${{ steps.description.outputs.titles }}
         destination_branch: ${{ inputs.destination-branch }}
