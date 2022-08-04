@@ -21,11 +21,11 @@ jobs:
           git config --global user.email "30003564+sqbot@users.noreply.github.com"
           git config --global user.name "sqbot"
           git checkout --orphan ci/update-pr/base
-          git commit -m "Initial commit"
+          git commit -m "Initial commit" --allow-empty
           git checkout -b ci/update-pr/head
-          git commit -m "Test commit A (#1)"
+          git commit -m "Test commit A (#1)" --allow-empty
           git checkout -b ci/update-pr/merged
-          git commit -m "Test commit B"
+          git commit -m "Test commit B" --allow-empty
           git checkout ci/update-pr/head
           git merge -m "Merge pull request #2 from ci/update-pr/merged"
           git push -f ci/update-pr/base ci/update-pr/head
