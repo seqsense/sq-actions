@@ -1,5 +1,5 @@
-name: Update or create PR
-description: Update or create PR with feature list and assignee by team
+name: Update release PR
+description: Update or create release PR with feature list and assignee by team
 inputs:
   pr-title:
     description: Title of PR (can't use single quote)
