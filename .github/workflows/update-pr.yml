@@ -16,9 +16,6 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: refs/remotes/origin/${{ inputs.source-branch }}
-          fetch-depth: 0
       - name: Setup fixtures
         run: |
           git checkout --orphan ci/update-pr/base
