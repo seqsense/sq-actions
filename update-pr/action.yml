@@ -10,7 +10,7 @@ inputs:
   destination-branch:
     description: Destination branch of PR
     required: true
-  asignee-team-slug:
+  asignee-team:
     description: GitHub team to be assigned
   github-token:
     description: GitHub token used to open PR
@@ -57,7 +57,7 @@ runs:
         reverse: true
     - name: List team member
       uses: actions/github-script@v6
-      if: inputs.asignee-team-slug
+      if: inputs.asignee-team
       id: assignees
       with:
         result-encoding: string
@@ -65,7 +65,7 @@ runs:
         script: |
           const members = await github.rest.teams.listMembersInOrg({
             org: context.repo.owner,
-            team_slug: '${{ inputs.asignee-team-slug }}',
+            team_slug: '${{ inputs.asignee-team }}',
           })
           return members.data.reduce((acc, v) => {
             acc.push(`--assignee ${v.login}`)
