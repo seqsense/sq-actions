@@ -73,6 +73,8 @@ runs:
           }, []).join(' ')
     - name: Output body as file
       uses: actions/github-script@v6
+      env:
+        BODY: ${{ steps.description.outputs.titles }}
       with:
         script: |
           const fs = require('fs')
