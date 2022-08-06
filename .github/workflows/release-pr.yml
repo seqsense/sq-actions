@@ -54,6 +54,23 @@ jobs:
           body=$(gh pr view ci/release-pr/head --json body | jq .body)
           echo "${body}"
           test "${body}" = '"* #1\n* #2"'
+      - name: Update fixtures
+        run: |
+          git commit -m "Test commit C (#3)" --allow-empty
+          git push -f origin ci/release-pr/head
+      - name: Update PR
+        uses: ./../release-pr
+        with:
+          pr-title: Update PR test
+          source-branch: ci/release-pr/head
+          destination-branch: ci/release-pr/base
+      - name: Check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          body=$(gh pr view ci/release-pr/head --json body | jq .body)
+          echo "${body}"
+          test "${body}" = '"* #1\n* #2\n* #3"'
       - name: Cleanup
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
