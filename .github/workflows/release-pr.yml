@@ -1,0 +1,80 @@
+name: release-pr
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/release-pr.yml
+      - release-pr/**
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/release-pr.yml
+      - release-pr/**
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Copy current version of action to tmpdir
+        run: cp -r ./release-pr ../release-pr
+      - name: Setup fixtures
+        run: |
+          git config --global user.email "30003564+sqbot@users.noreply.github.com"
+          git config --global user.name "sqbot"
+          git checkout --orphan ci/release-pr/base
+          git rm --cached -r .
+          git commit -m "Initial commit" --allow-empty
+          git checkout -b ci/release-pr/head
+          git commit -m "Test commit A (#1)" --allow-empty
+          git checkout -b ci/release-pr/merged
+          git commit -m "Test commit B" --allow-empty
+          git checkout ci/release-pr/head
+          git merge \
+            -m "Merge pull request #2 from ci/release-pr/merged" \
+            --no-ff \
+            ci/release-pr/merged
+          git push -f origin ci/release-pr/base ci/release-pr/head
+      - name: Update PR
+        uses: ./../release-pr
+        with:
+          pr-title: Update PR test
+          source-branch: ci/release-pr/head
+          destination-branch: ci/release-pr/base
+      - name: Check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          body=$(gh pr view ci/release-pr/head --json body | jq .body)
+          echo "${body}"
+          test "${body}" = '"* #1\n* #2"'
+      - name: Update fixtures
+        run: |
+          git commit -m "Test commit C (#3)" --allow-empty
+          git push -f origin ci/release-pr/head
+      - name: Update PR
+        uses: ./../release-pr
+        with:
+          pr-title: Update PR test
+          source-branch: ci/release-pr/head
+          destination-branch: ci/release-pr/base
+      - name: Check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          body=$(gh pr view ci/release-pr/head --json body | jq .body)
+          echo "${body}"
+          test "${body}" = '"* #1\n* #2\n* #3"'
+      - name: Cleanup
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr close ci/release-pr/head
+          git push origin --delete ci/release-pr/head
+          git push origin --delete ci/release-pr/base

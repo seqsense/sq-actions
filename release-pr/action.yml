@@ -1,0 +1,102 @@
+name: Update release PR
+description: Update or create release PR with feature list and assignee by team
+inputs:
+  pr-title:
+    description: Title of PR (can't use single quote)
+    required: true
+  source-branch:
+    description: Source branch of PR
+    required: true
+  destination-branch:
+    description: Destination branch of PR
+    required: true
+  asignee-team:
+    description: GitHub team to be assigned
+  github-token:
+    description: GitHub token used to open PR
+    default: ${{ github.token }}
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Validate inputs
+      uses: actions/github-script@v6
+      env:
+        PR_TITLE: ${{ inputs.pr-title }}
+        SOURCE_BRANCH: ${{ inputs.source-branch }}
+        DESTINATION_BRANCH: ${{ inputs.destination-branch }}
+      with:
+        script: |
+          let error = false
+          ;[
+            process.env.PR_TITLE,
+          ].forEach((val) => {
+            if (!/^[^'\\]+$/.test(val)) {
+              error = true
+              core.error(`must not contain single quote nor backslash: ${val}`)
+            }
+          })
+          ;[
+            process.env.SOURCE_BRANCH,
+            process.env.DESTINATION_BRANCH,
+          ].forEach((val) => {
+            if (!/^[a-zA-Z0-9.\-_/]+$/.test(val)) {
+              error = true
+              core.error(`must be branch name: ${val}`)
+            }
+          })
+          if (error) {
+            throw 'validation error'
+          }
+    - uses: seqsense/extract-pr-titles-action@v0
+      id: description
+      with:
+        from: origin/${{ inputs.destination-branch }}
+        to: origin/${{ inputs.source-branch }}
+        format: "* #{number}"
+        reverse: true
+    - name: List team member
+      uses: actions/github-script@v6
+      if: inputs.asignee-team
+      id: assignees
+      with:
+        result-encoding: string
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const members = await github.rest.teams.listMembersInOrg({
+            org: context.repo.owner,
+            team_slug: '${{ inputs.asignee-team }}',
+          })
+          return members.data.reduce((acc, v) => {
+            acc.push(`--assignee ${v.login}`)
+            return acc
+          }, []).join(' ')
+    - name: Output body as file
+      uses: actions/github-script@v6
+      env:
+        BODY: ${{ steps.description.outputs.titles }}
+      with:
+        script: |
+          const fs = require('fs')
+          const process = require('process')
+          fs.writeFileSync('/tmp/body.txt', process.env.BODY)
+    - name: Open PR
+      shell: bash
+      run: |
+        gh pr create \
+            --title '${{ inputs.pr-title }}' \
+            --body-file /tmp/body.txt \
+            --base ${{ inputs.destination-branch }} \
+            --head ${{ inputs.source-branch }} \
+            ${{ steps.assignees.outputs.result }} \
+          || true
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+    - name: Update PR body
+      shell: bash
+      run: |
+        gh pr edit \
+            ${{ inputs.source-branch }} \
+            --body-file /tmp/body.txt
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
