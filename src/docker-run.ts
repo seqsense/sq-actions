@@ -32,7 +32,7 @@ export const dockerRun = () => {
 export const dockerRunPost = () => {
   try {
     const containerId = core.getState('containerId')
-    core.info(cp.execSync(`docker logs ${containerId}`).toString())
+    core.debug(cp.execSync(`docker logs ${containerId}`).toString())
     core.info(cp.execSync(`docker kill ${containerId}`).toString())
   } catch (error) {
     core.setFailed(error.message)
