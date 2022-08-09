@@ -24,6 +24,7 @@ export const dockerRun = () => {
       .execSync(`docker run -d ${ports} ${image}`)
       .toString()
     core.saveState('containerId', containerId)
+    core.info(`Started ${image} as ${containerId}`)
   } catch (error) {
     core.setFailed(error.message)
   }
@@ -32,7 +33,18 @@ export const dockerRun = () => {
 export const dockerRunPost = () => {
   try {
     const containerId = core.getState('containerId')
-    cp.execSync(`docker kill ${containerId}`)
+    core.info(`Getting logs from ${containerId}`)
+    const { stdout, error } = cp.spawnSync(`docker logs ${containerId} 2>&1`, {
+      shell: true,
+    })
+    if (stdout) {
+      core.debug(stdout.toString())
+    }
+    if (error) {
+      core.error(error)
+    }
+    core.info(`Stopping ${containerId}`)
+    core.info(cp.execSync(`docker kill ${containerId}`).toString())
   } catch (error) {
     core.setFailed(error.message)
   }

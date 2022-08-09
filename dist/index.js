@@ -2223,6 +2223,7 @@ const dockerRun = () => {
         const containerId = external_child_process_namespaceObject.execSync(`docker run -d ${ports} ${image}`)
             .toString();
         core.saveState('containerId', containerId);
+        core.info(`Started ${image} as ${containerId}`);
     }
     catch (error) {
         core.setFailed(error.message);
@@ -2231,7 +2232,18 @@ const dockerRun = () => {
 const dockerRunPost = () => {
     try {
         const containerId = core.getState('containerId');
-        external_child_process_namespaceObject.execSync(`docker kill ${containerId}`);
+        core.info(`Getting logs from ${containerId}`);
+        const { stdout, error } = external_child_process_namespaceObject.spawnSync(`docker logs ${containerId} 2>&1`, {
+            shell: true,
+        });
+        if (stdout) {
+            core.debug(stdout.toString());
+        }
+        if (error) {
+            core.error(error);
+        }
+        core.info(`Stopping ${containerId}`);
+        core.info(external_child_process_namespaceObject.execSync(`docker kill ${containerId}`).toString());
     }
     catch (error) {
         core.setFailed(error.message);
