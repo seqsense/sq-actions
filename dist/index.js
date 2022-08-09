@@ -2233,15 +2233,11 @@ const dockerRunPost = () => {
     try {
         const containerId = core.getState('containerId');
         core.info(`Getting logs from ${containerId}`);
-        const { stdout, stderr, error } = external_child_process_namespaceObject.spawnSync('docker', [
-            'logs',
-            containerId,
-        ]);
+        const { stdout, error } = external_child_process_namespaceObject.spawnSync(`docker logs ${containerId} 2>&1`, {
+            shell: true,
+        });
         if (stdout) {
             core.debug(stdout.toString());
-        }
-        if (stderr) {
-            core.info(stderr.toString());
         }
         if (error) {
             core.error(error);
