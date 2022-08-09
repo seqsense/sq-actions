@@ -62,7 +62,7 @@ runs:
             throw 'validation error'
           }
     - name: Start local registry
-      uses: seqsense/sq-actions/internal/docker-run@output-docker-registry-logs-on-post-job
+      uses: seqsense/sq-actions/internal/docker-run@main
       with:
         ports: ${{ inputs.local-registry-port }}:5000
         image: registry:${{ inputs.local-registry-image-tag }}
