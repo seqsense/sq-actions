@@ -33,7 +33,6 @@ export const dockerRun = () => {
 export const dockerRunPost = () => {
   try {
     const containerId = core.getState('containerId')
-
     core.info(`Getting logs from ${containerId}`)
     const { stdout, error } = cp.spawnSync(`docker logs ${containerId} 2>&1`, {
       shell: true,
@@ -44,10 +43,8 @@ export const dockerRunPost = () => {
     if (error) {
       core.error(error)
     }
-
     core.info(`Stopping ${containerId}`)
     core.info(cp.execSync(`docker kill ${containerId}`).toString())
-    core.info(`Stopped ${containerId}`)
   } catch (error) {
     core.setFailed(error.message)
   }

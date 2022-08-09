@@ -2244,7 +2244,6 @@ const dockerRunPost = () => {
         }
         core.info(`Stopping ${containerId}`);
         core.info(external_child_process_namespaceObject.execSync(`docker kill ${containerId}`).toString());
-        core.info(`Stopped ${containerId}`);
     }
     catch (error) {
         core.setFailed(error.message);
