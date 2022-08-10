@@ -95,8 +95,13 @@ runs:
     - name: Update PR body
       shell: bash
       run: |
-        gh pr edit \
-            ${{ inputs.source-branch }} \
-            --body-file /tmp/body.txt
+        number=$(
+          gh pr list \
+            --base ${{ inputs.destination-branch }} \
+            --head ${{ inputs.source-branch }} \
+            --json number \
+            --jq .[0].number
+        )
+        gh pr edit ${number} --body-file /tmp/body.txt
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
