@@ -21,7 +21,9 @@ jobs:
           images: |
             registry.hub.docker.com/library/alpine:3.15
             registry.hub.docker.com/library/alpine:3.16
-      - name: Check
+      - name: Check registry-addr
+        run: test "${{ steps.cache.outputs.registry-addr }}" = "localhost:5000"
+      - name: Check buildx-opts
         env:
           BUILDX_OPTS: ${{ steps.cache.outputs.buildx-opts }}
         run: |
