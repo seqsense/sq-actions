@@ -20,6 +20,9 @@ outputs:
   buildx-opts:
     description: Docker builx options to use images as cache
     value: ${{ steps.pull.outputs.buildx-opts }}
+  registry-addr:
+    description: Address of the local registry (localhost:port)
+    value: localhost:${{ inputs.local-registry-port }}
 runs:
   using: composite
   steps:
