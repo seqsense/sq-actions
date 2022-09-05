@@ -39,7 +39,7 @@ runs:
           ;[
             process.env.IMAGES,
           ].forEach((val) => {
-            if (!/^[-a-zA-Z0-9.\/:\s]+$/.test(val)) {
+            if (!/^[-a-zA-Z0-9.\/:\s]*$/.test(val)) {
               error = true
               core.error(`must be list of strings: ${val}`)
             }
