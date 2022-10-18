@@ -84,5 +84,5 @@ runs:
             buildx_opts="${buildx_opts} --cache-from=${cache}"
           fi
         done
-        echo "::set-output name=buildx-opts::${buildx_opts}"
+        echo "buildx-opts=${buildx_opts}" >> ${GITHUB_OUTPUT}
         echo "${buildx_opts}"
