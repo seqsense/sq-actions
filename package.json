@@ -13,7 +13,7 @@
     "@actions/core": "1.10.0"
   },
   "devDependencies": {
-    "@types/node": "16.18.3",
+    "@types/node": "16.18.11",
     "@vercel/ncc": "0.36.0",
     "eslint": "8.31.0",
     "prettier": "2.7.1",
