@@ -1,0 +1,27 @@
+name: Notify branch build
+description: Notify on branch build to originated PR
+inputs:
+  title:
+    description: Notification title
+    required: true
+  body:
+    description: Notification body
+  github-token:
+    description: GitHub token used to open PR
+    default: ${{ github.token }}
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Get PR number
+      id: pr
+      uses: kamatama41/get-pr-number-action@v0
+      with:
+        github_token: ${{ secrets.github-token }}
+    - name: Setup gh-pr-comment
+      uses: at-wat/setup-gh-pr-comment@v0
+    - run: gh-pr-comment -pr ${{ steps.pr.outputs.number }} "${TITLE}" "${BODY}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.github-token }}
+        TITLE: ${{ inputs.title }}
+        BODY: ${{ inputs.body }}

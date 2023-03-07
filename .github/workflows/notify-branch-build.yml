@@ -1,0 +1,26 @@
+name: notify-branch-build
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/notify-branch-build.yml
+      - notify-branch-build/**
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/notify-branch-build.yml
+      - notify-branch-build/**
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Notify
+        uses: ./../notify-branch-build
+        with:
+          title: Notification from branch build
