@@ -17,15 +17,15 @@ runs:
       id: pr
       uses: kamatama41/get-pr-number-action@v0
       with:
-        github_token: ${{ secrets.github-token }}
+        github_token: ${{ inputs.github-token }}
     - name: Setup gh-pr-comment
       uses: at-wat/setup-gh-pr-comment@v0
       with:
-        token: ${{ secrets.github-token }}
+        token: ${{ inputs.github-token }}
     - name: Notify
       shell: bash
       run: gh-pr-comment -pr ${{ steps.pr.outputs.number }} "${TITLE}" "${BODY}"
       env:
-        GITHUB_TOKEN: ${{ input.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
         TITLE: ${{ inputs.title }}
         BODY: ${{ inputs.body }}
