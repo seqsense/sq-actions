@@ -23,6 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Notify
-        uses: ./../notify-branch-build
+        uses: ./notify-branch-build
         with:
           title: Notification from branch build
