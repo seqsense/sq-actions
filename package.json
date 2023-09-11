@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@types/node": "16.18.50",
-    "@vercel/ncc": "0.36.1",
+    "@vercel/ncc": "0.38.0",
     "eslint": "8.49.0",
     "prettier": "3.0.3",
     "typescript": "5.2.2"
