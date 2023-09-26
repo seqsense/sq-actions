@@ -5,5 +5,5 @@ inputs:
     description: Regexp pattern of the environment variables
     required: true
 runs:
-  using: node16
+  using: node20
   main: ../dist/clear-env.js
