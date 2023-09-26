@@ -8,6 +8,6 @@ inputs:
     description: Ports (host:container ...)
 
 runs:
-  using: node16
+  using: node20
   main: ../../dist/docker-run.js
   post: ../../dist/docker-run.post.js
