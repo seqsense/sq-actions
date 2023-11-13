@@ -20,7 +20,7 @@ runs:
   using: composite
   steps:
     - name: Validate inputs
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         PR_TITLE: ${{ inputs.pr-title }}
         SOURCE_BRANCH: ${{ inputs.source-branch }}
@@ -56,7 +56,7 @@ runs:
         format: "* #{number}"
         reverse: true
     - name: List team member
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       if: inputs.asignee-team
       id: assignees
       with:
@@ -72,7 +72,7 @@ runs:
             return acc
           }, []).join(' ')
     - name: Output body as file
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         BODY: ${{ steps.description.outputs.titles }}
       with:
