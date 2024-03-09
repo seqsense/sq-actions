@@ -19,5 +19,5 @@
     "prettier": "3.2.5",
     "typescript": "5.3.3"
   },
-  "packageManager": "yarn@1.22.21"
+  "packageManager": "yarn@1.22.22"
 }
