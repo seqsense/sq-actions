@@ -41,17 +41,19 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
+      - name: Enable pnpm
+        run: corepack enable pnpm
       - uses: actions/checkout@v4
         with:
           ref: ${{ fromJSON(steps.get-ref.outputs.result).ref }}
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          cache: yarn
+          cache: pnpm
       - name: Install
-        run: yarn
+        run: pnpm install
       - name: Build
-        run: yarn build
+        run: pnpm build
       - name: Update
         run: |
           if git diff --exit-code; then
