@@ -41,11 +41,11 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
+      - name: Enable pnpm
+        run: corepack enable pnpm
       - uses: actions/checkout@v4
         with:
           ref: ${{ fromJSON(steps.get-ref.outputs.result).ref }}
-      - name: Enable pnpm
-        run: corepack enable pnpm
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
