@@ -13,6 +13,7 @@ inputs:
   src-tag:
     description: Source image tag
     required: true
+    default: latest
   dest-tag:
     description: Destination image tag
     required: true
