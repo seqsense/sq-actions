@@ -34,11 +34,11 @@ runs:
         digest=${GITHUB_SHA::8}
         docker tag \
           ${{ inputs.image }}:${{ inputs.src-tag }} \
-          ${{ steps.login-ecr.outputs.registry }}:${{ inputs.image }}:${digest}
+          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
         docker tag \
           ${{ inputs.image }}:${{ inputs.src-tag }} \
-          ${{ steps.login-ecr.outputs.registry }}:${{ inputs.image }}:${{ inputs.dest-tag }}
+          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${{ inputs.dest-tag }}
         docker push \
-          ${{ steps.login-ecr.outputs.registry }}:${{ inputs.image }}:${digest}
+          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
         docker push \
-          ${{ steps.login-ecr.outputs.registry }}:${{ inputs.image }}:${{ inputs.dest-tag }}
+          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${{ inputs.dest-tag }}
