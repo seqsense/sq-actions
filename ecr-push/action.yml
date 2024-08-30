@@ -1,0 +1,44 @@
+name: Push to ECR
+description: Push to ECR with digest tag
+inputs:
+  aws-assume-role-arn:
+    description: Assume Role ARN
+    required: true
+  aws-region:
+    description: AWS Region
+    required: true
+  image:
+    description: Image name
+    required: true
+  src-tag:
+    description: Source image tag
+    required: true
+    default: latest
+  dest-tag:
+    description: Destination image tag
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ inputs.aws-assume-role-arn }}
+        aws-region: ${{ inputs.aws-region }}
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    - name: Push
+      shell: bash
+      run: |
+        digest=${GITHUB_SHA::8}
+        docker tag \
+          ${{ inputs.image }}:${{ inputs.src-tag }} \
+          ${{ steps.login-ecr.outputs.registry }}:${{ inputs.image }}:${digest}
+        docker tag \
+          ${{ inputs.image }}:${{ inputs.src-tag }} \
+          ${{ steps.login-ecr.outputs.registry }}:${{ inputs.image }}:${{ inputs.dest-tag }}
+        docker push \
+          ${{ steps.login-ecr.outputs.registry }}:${{ inputs.image }}:${digest}
+        docker push \
+          ${{ steps.login-ecr.outputs.registry }}:${{ inputs.image }}:${{ inputs.dest-tag }}
