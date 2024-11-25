@@ -16,8 +16,8 @@ importers:
         specifier: ^9.0.0
         version: 9.15.0
       '@types/node':
-        specifier: 20.16.2
-        version: 20.16.2
+        specifier: 20.17.7
+        version: 20.17.7
       '@vercel/ncc':
         specifier: 0.38.1
         version: 0.38.1
@@ -103,8 +103,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@20.16.2':
-    resolution: {integrity: sha512-91s/n4qUPV/wg8eE9KHYW1kouTfDk2FPGjXbBMfRWP/2vg1rCXNQL1OCabwGs0XSdukuK+MwCDXE30QpSeMUhQ==}
+  '@types/node@20.17.7':
+    resolution: {integrity: sha512-sZXXnpBFMKbao30dUAvzKbdwA2JM1fwUtVEq/kxKuPI5mMwZiRElCpTXb0Biq/LMEVpXDZL5G5V0RPnxKeyaYg==}
 
   '@vercel/ncc@0.38.1':
     resolution: {integrity: sha512-IBBb+iI2NLu4VQn3Vwldyi2QwaXt5+hTyh58ggAMoCGE6DJmPvwL3KPBWcJl1m9LYPChBLE980Jw+CS4Wokqxw==}
@@ -469,7 +469,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@20.16.2':
+  '@types/node@20.17.7':
     dependencies:
       undici-types: 6.19.6
 
