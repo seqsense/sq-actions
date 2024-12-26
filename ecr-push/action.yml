@@ -17,6 +17,10 @@ inputs:
   dest-tag:
     description: Destination image tag
     required: true
+  push-digest-tag:
+    description: Push also digest tag (default: true)
+    required: true
+    default: true
 runs:
   using: composite
   steps:
@@ -32,13 +36,21 @@ runs:
       shell: bash
       run: |
         digest=${GITHUB_SHA::8}
-        docker tag \
-          ${{ inputs.image }}:${{ inputs.src-tag }} \
-          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
+
+        if [ "${{ inputs.push-digest-tag }}" = "true" ]; then
+          docker tag \
+            ${{ inputs.image }}:${{ inputs.src-tag }} \
+            ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
+        fi
+
         docker tag \
           ${{ inputs.image }}:${{ inputs.src-tag }} \
           ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${{ inputs.dest-tag }}
-        docker push \
-          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
+
+        if [ "${{ inputs.push-digest-tag }}" = "true" ]; then
+          docker push \
+            ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
+        fi
+
         docker push \
           ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${{ inputs.dest-tag }}
