@@ -48,7 +48,7 @@ runs:
             ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:"${TAG}"
           docker push \
             ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:"${TAG}"
-          if [ ${{ inputs.push-multi-level-tags }}=="false" ]; then
+          if [ ${{ inputs.push-multi-level-tags }} == "false" ]; then
             break
           fi
           TRIMMED_TAG="${TAG%.*}"
