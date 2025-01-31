@@ -51,6 +51,9 @@ runs:
           if [ ${{ inputs.push-multi-level-tags }} == "false" ]; then
             break
           fi
+          if [[ "${TAG}" == *-* ]]; then
+            break
+          fi
           TRIMMED_TAG="${TAG%.*}"
           if [ "${TAG}" == "${TRIMMED_TAG}" ]; then
             break
