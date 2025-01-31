@@ -17,6 +17,10 @@ inputs:
   dest-tag:
     description: Destination image tag
     required: true
+  push-multi-level-tags:
+    description: If true, create tags by repeatedly removing the dot and following from the dest-tag
+    required: true
+    default: "false"
 runs:
   using: composite
   steps:
@@ -35,10 +39,25 @@ runs:
         docker tag \
           ${{ inputs.image }}:${{ inputs.src-tag }} \
           ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
-        docker tag \
-          ${{ inputs.image }}:${{ inputs.src-tag }} \
-          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${{ inputs.dest-tag }}
         docker push \
           ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
-        docker push \
-          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${{ inputs.dest-tag }}
+        TAG=${{ inputs.dest-tag }}
+        while [ -n "${TAG}" ]; do
+          docker tag \
+            ${{ inputs.image }}:${{ inputs.src-tag }} \
+            ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:"${TAG}"
+          docker push \
+            ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:"${TAG}"
+
+          if [ ${{ inputs.push-multi-level-tags }} == "false" ]; then
+            break
+          fi
+          if [[ "${TAG}" == *-* ]]; then
+            break
+          fi
+          TRIMMED_TAG="${TAG%.*}"
+          if [ "${TAG}" == "${TRIMMED_TAG}" ]; then
+            break
+          fi
+          TAG="${TRIMMED_TAG}"
+        done
