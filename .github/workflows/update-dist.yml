@@ -41,8 +41,7 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-      - name: Enable pnpm
-        run: npm install -g corepack@latest && corepack enable pnpm
+      - uses: pnpm/action-setup@v4
       - uses: actions/checkout@v4
         with:
           ref: ${{ fromJSON(steps.get-ref.outputs.result).ref }}
