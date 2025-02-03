@@ -18,7 +18,7 @@ inputs:
     description: Destination image tag
     required: true
   push-digest-tag:
-    description: Push also digest tag (default: true)
+    description: "Push also digest tag (default: true)"
     required: true
     default: "true"
   push-multi-level-tags:
