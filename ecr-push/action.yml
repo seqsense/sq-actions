@@ -17,6 +17,10 @@ inputs:
   dest-tag:
     description: Destination image tag
     required: true
+  push-digest-tag:
+    description: Push also digest tag (default: true)
+    required: true
+    default: "true"
   push-multi-level-tags:
     description: If true, create tags by repeatedly removing the dot and following from the dest-tag
     required: true
@@ -32,7 +36,8 @@ runs:
     - name: Login to ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
-    - name: Push
+    - name: Push digest
+      if: inputs.push-digest-tag == 'true'
       shell: bash
       run: |
         digest=${GITHUB_SHA::8}
@@ -41,6 +46,9 @@ runs:
           ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
         docker push \
           ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
+    - name: Push
+      shell: bash
+      run: |
         TAG=${{ inputs.dest-tag }}
         while [ -n "${TAG}" ]; do
           docker tag \
