@@ -20,7 +20,11 @@ inputs:
   push-digest-tag:
     description: Push also digest tag (default: true)
     required: true
-    default: true
+    default: "true"
+  push-multi-level-tags:
+    description: If true, create tags by repeatedly removing the dot and following from the dest-tag
+    required: true
+    default: "false"
 runs:
   using: composite
   steps:
@@ -36,21 +40,30 @@ runs:
       shell: bash
       run: |
         digest=${GITHUB_SHA::8}
-
         if [ "${{ inputs.push-digest-tag }}" = "true" ]; then
           docker tag \
             ${{ inputs.image }}:${{ inputs.src-tag }} \
             ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
-        fi
-
-        docker tag \
-          ${{ inputs.image }}:${{ inputs.src-tag }} \
-          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${{ inputs.dest-tag }}
-
-        if [ "${{ inputs.push-digest-tag }}" = "true" ]; then
           docker push \
             ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${digest}
         fi
+        TAG=${{ inputs.dest-tag }}
+        while [ -n "${TAG}" ]; do
+          docker tag \
+            ${{ inputs.image }}:${{ inputs.src-tag }} \
+            ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:"${TAG}"
+          docker push \
+            ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:"${TAG}"
 
-        docker push \
-          ${{ steps.login-ecr.outputs.registry }}/${{ inputs.image }}:${{ inputs.dest-tag }}
+          if [ ${{ inputs.push-multi-level-tags }} == "false" ]; then
+            break
+          fi
+          if [[ "${TAG}" == *-* ]]; then
+            break
+          fi
+          TRIMMED_TAG="${TAG%.*}"
+          if [ "${TAG}" == "${TRIMMED_TAG}" ]; then
+            break
+          fi
+          TAG="${TRIMMED_TAG}"
+        done
