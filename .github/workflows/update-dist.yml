@@ -41,10 +41,10 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-      - uses: pnpm/action-setup@v4
       - uses: actions/checkout@v4
         with:
           ref: ${{ fromJSON(steps.get-ref.outputs.result).ref }}
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
