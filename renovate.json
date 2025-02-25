@@ -4,7 +4,11 @@
   "packageRules": [
     {
       "groupName": "js formatter and linter",
-      "matchPackageNames": ["/^@eslint/js$/", "/^eslint$/", "/^prettier$/"]
+      "matchPackageNames": [
+        "/^@eslint\/js$/",
+        "/^eslint$/",
+        "/^prettier$/"
+      ]
     }
   ]
 }
