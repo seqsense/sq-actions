@@ -1,16 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
-  ],
+  "extends": ["config:recommended"],
   "packageRules": [
     {
-      "matchPackagePatterns": [
-        "^@eslint/js$",
-        "^eslint$",
-        "^prettier$"
-      ],
-      "groupName": "js formatter and linter"
+      "groupName": "js formatter and linter",
+      "matchPackageNames": [
+        "/^@eslint\/js$/",
+        "/^eslint$/",
+        "/^prettier$/"
+      ]
     }
   ]
 }
