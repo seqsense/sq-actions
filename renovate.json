@@ -9,6 +9,10 @@
         "/^eslint$/",
         "/^prettier$/"
       ]
+    },
+    {
+      "matchDatasources": ["npm"],
+      "minimumReleaseAge": "3 days"
     }
   ]
 }
