@@ -20,7 +20,7 @@ jobs:
       FOO_GHI: 6
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Remove HOGE_
         uses: ./clear-env/
         with:
