@@ -21,7 +21,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Copy current version of action to tmpdir
         run: cp -r ./release-pr ../release-pr
       - name: Setup fixtures
