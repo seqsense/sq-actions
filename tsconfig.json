@@ -5,6 +5,8 @@
     "types": [
       "node"
     ],
+    "outDir": "./dist",
+    "rootDir": "./src",
     "noEmit": true
   }
 }
