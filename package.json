@@ -1,6 +1,7 @@
 {
   "name": "sq-actions",
   "description": "GitHub Actions for SEQSENSE CI",
+  "type": "module",
   "scripts": {
     "build": "ncc build src/index.ts",
     "fmt": "prettier --write src/*.ts",
