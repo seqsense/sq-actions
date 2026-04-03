@@ -1,1 +1,3 @@
-require('./').dockerRunPost()
+import { dockerRunPost } from './index.js'
+
+dockerRunPost()
