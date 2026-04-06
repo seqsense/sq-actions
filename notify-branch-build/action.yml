@@ -15,7 +15,7 @@ runs:
   steps:
     - name: Get PR number
       id: pr
-      uses: kamatama41/get-pr-number-action@v0
+      uses: kamatama41/get-pr-number-action@v1
       with:
         github_token: ${{ inputs.github-token }}
     - name: Setup gh-pr-comment
