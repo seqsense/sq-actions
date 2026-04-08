@@ -1,1 +1,3 @@
-require('./').dockerRun()
+import { dockerRun } from './index.js'
+
+dockerRun()

@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "moduleResolution": "node",
+    "target": "esnext",
+    "module": "nodenext",
+    "types": [
+      "node"
+    ],
+    "outDir": "./dist",
+    "rootDir": "./src",
     "noEmit": true
   }
 }
