@@ -27,7 +27,7 @@ runs:
   using: composite
   steps:
     - name: Validate inputs
-      uses: actions/github-script@v8
+      uses: actions/github-script@v9
       env:
         IMAGES: ${{ inputs.images }}
         LOCAL_REGISTRY_PORT: ${{ inputs.local-registry-port }}
