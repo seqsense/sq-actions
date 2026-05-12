@@ -14,7 +14,7 @@ importers:
     devDependencies:
       '@eslint/js':
         specifier: 10.0.1
-        version: 10.0.1(eslint@10.2.0)
+        version: 10.0.1(eslint@10.3.0)
       '@types/node':
         specifier: 24.12.2
         version: 24.12.2
@@ -22,8 +22,8 @@ importers:
         specifier: 0.38.4
         version: 0.38.4
       eslint:
-        specifier: 10.2.0
-        version: 10.2.0
+        specifier: 10.3.0
+        version: 10.3.0
       prettier:
         specifier: 3.8.3
         version: 3.8.3
@@ -181,8 +181,8 @@ packages:
     resolution: {integrity: sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  eslint@10.2.0:
-    resolution: {integrity: sha512-+L0vBFYGIpSNIt/KWTpFonPrqYvgKw1eUI5Vn7mEogrQcWtWYtNQ7dNqC+px/J0idT3BAkiWrhfS7k+Tum8TUA==}
+  eslint@10.3.0:
+    resolution: {integrity: sha512-XbEXaRva5cF0ZQB8w6MluHA0kZZfV2DuCMJ3ozyEOHLwDpZX2Lmm/7Pp0xdJmI0GL1W05VH5VwIFHEm1Vcw2gw==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     hasBin: true
     peerDependencies:
@@ -385,9 +385,9 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@eslint-community/eslint-utils@4.8.0(eslint@10.2.0)':
+  '@eslint-community/eslint-utils@4.8.0(eslint@10.3.0)':
     dependencies:
-      eslint: 10.2.0
+      eslint: 10.3.0
       eslint-visitor-keys: 3.4.3
 
   '@eslint-community/regexpp@4.12.2': {}
@@ -408,9 +408,9 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@eslint/js@10.0.1(eslint@10.2.0)':
+  '@eslint/js@10.0.1(eslint@10.3.0)':
     optionalDependencies:
-      eslint: 10.2.0
+      eslint: 10.3.0
 
   '@eslint/object-schema@3.0.5': {}
 
@@ -492,9 +492,9 @@ snapshots:
 
   eslint-visitor-keys@5.0.1: {}
 
-  eslint@10.2.0:
+  eslint@10.3.0:
     dependencies:
-      '@eslint-community/eslint-utils': 4.8.0(eslint@10.2.0)
+      '@eslint-community/eslint-utils': 4.8.0(eslint@10.3.0)
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.23.5
       '@eslint/config-helpers': 0.5.5
