@@ -1,3 +1,3 @@
-import { dockerRun } from './'
+import { dockerRun } from './index.js'
 
 dockerRun()

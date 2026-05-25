@@ -1,3 +1,3 @@
-import { clearEnv } from './'
+import { clearEnv } from './index.js'
 
 clearEnv()

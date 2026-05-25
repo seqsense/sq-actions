@@ -1,3 +1,3 @@
-import { dockerRunPost } from './'
+import { dockerRunPost } from './index.js'
 
 dockerRunPost()
