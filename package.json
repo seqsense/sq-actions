@@ -5,10 +5,11 @@
     "build": "ncc build src/index.ts",
     "fmt": "prettier --write src/*.ts",
     "lint": "eslint",
-    "typecheck": "tsc"
+    "typecheck": "tsc --noEmit"
   },
   "author": "SEQSENSE",
   "license": "Apache-2.0",
+  "type": "module",
   "dependencies": {
     "@actions/core": "3.0.1"
   },
