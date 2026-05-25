@@ -1,1 +1,3 @@
-require('./').clearEnv()
+import { clearEnv } from './'
+
+clearEnv()
