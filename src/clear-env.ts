@@ -14,7 +14,7 @@ export const clearEnv = () => {
     if (error instanceof Error) {
       core.setFailed(error.toString())
     } else {
-      core.setFailed(`unknown error type: ${typeof error}`)
+      core.setFailed(String(error))
     }
   }
 }
