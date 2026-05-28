@@ -11,10 +11,6 @@ export const clearEnv = () => {
         core.exportVariable(key, '')
       })
   } catch (error) {
-    if (error instanceof Error) {
-      core.setFailed(error.toString())
-    } else {
-      core.setFailed(String(error))
-    }
+    core.setFailed(String(error))
   }
 }

@@ -26,11 +26,7 @@ export const dockerRun = () => {
     core.saveState('containerId', containerId)
     core.info(`Started ${image} as ${containerId}`)
   } catch (error) {
-    if (error instanceof Error) {
-      core.setFailed(error.toString())
-    } else {
-      core.setFailed(String(error))
-    }
+    core.setFailed(String(error))
   }
 }
 
@@ -50,10 +46,6 @@ export const dockerRunPost = () => {
     core.info(`Stopping ${containerId}`)
     core.info(cp.execSync(`docker kill ${containerId}`).toString())
   } catch (error) {
-    if (error instanceof Error) {
-      core.setFailed(error.toString())
-    } else {
-      core.setFailed(String(error))
-    }
+    core.setFailed(String(error))
   }
 }
