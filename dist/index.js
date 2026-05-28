@@ -30812,12 +30812,7 @@ const clearEnv = () => {
         });
     }
     catch (error) {
-        if (error instanceof Error) {
-            setFailed(error.toString());
-        }
-        else {
-            setFailed(String(error));
-        }
+        setFailed(String(error));
     }
 };
 
@@ -30846,12 +30841,7 @@ const dockerRun = () => {
         info(`Started ${image} as ${containerId}`);
     }
     catch (error) {
-        if (error instanceof Error) {
-            setFailed(error.toString());
-        }
-        else {
-            setFailed(String(error));
-        }
+        setFailed(String(error));
     }
 };
 const dockerRunPost = () => {
@@ -30871,12 +30861,7 @@ const dockerRunPost = () => {
         info(external_child_process_namespaceObject.execSync(`docker kill ${containerId}`).toString());
     }
     catch (error) {
-        if (error instanceof Error) {
-            setFailed(error.toString());
-        }
-        else {
-            setFailed(String(error));
-        }
+        setFailed(String(error));
     }
 };
 
