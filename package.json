@@ -5,10 +5,11 @@
     "build": "ncc build src/index.ts",
     "fmt": "prettier --write src/*.ts",
     "lint": "eslint",
-    "typecheck": "tsc"
+    "typecheck": "tsc --noEmit"
   },
   "author": "SEQSENSE",
   "license": "Apache-2.0",
+  "type": "module",
   "dependencies": {
     "@actions/core": "3.0.1"
   },
@@ -18,7 +19,7 @@
     "@vercel/ncc": "0.38.4",
     "eslint": "10.4.0",
     "prettier": "3.8.3",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   },
   "packageManager": "pnpm@11.2.2"
 }
