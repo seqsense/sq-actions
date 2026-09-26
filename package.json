@@ -17,8 +17,8 @@
     "@eslint/js": "10.0.1",
     "@types/node": "24.13.4",
     "@vercel/ncc": "0.45.0",
-    "eslint": "10.10.0",
-    "prettier": "3.9.6",
+    "eslint": "10.11.0",
+    "prettier": "3.9.9",
     "typescript": "6.0.3"
   },
   "packageManager": "pnpm@12.4.1"
