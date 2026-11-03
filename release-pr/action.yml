@@ -53,8 +53,9 @@ runs:
       with:
         from: origin/${{ inputs.destination-branch }}
         to: origin/${{ inputs.source-branch }}
-        format: "* #{number}"
+        format: "* #{number} {author}"
         reverse: true
+        github-token: ${{ inputs.github-token }}
     - name: List team member
       uses: actions/github-script@v9
       if: inputs.asignee-team
