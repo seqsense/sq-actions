@@ -12,6 +12,13 @@ inputs:
     required: true
   asignee-team:
     description: GitHub team to be assigned
+  format:
+    description: |
+      Format of each PR line in the PR body.
+      See https://github.com/seqsense/extract-pr-titles-action for the placeholders.
+      Task list items (e.g. "* [ ] #{number}") checked in the current PR body are kept checked
+      when the body is updated. Lines are matched by the text after the checkbox.
+    default: "* #{number}"
   github-token:
     description: GitHub token used to open PR
     default: ${{ github.token }}
@@ -53,8 +60,9 @@ runs:
       with:
         from: origin/${{ inputs.destination-branch }}
         to: origin/${{ inputs.source-branch }}
-        format: "* #{number}"
+        format: ${{ inputs.format }}
         reverse: true
+        github-token: ${{ inputs.github-token }}
     - name: List team member
       uses: actions/github-script@v9
       if: inputs.asignee-team
@@ -93,15 +101,44 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Update PR body
-      shell: bash
-      run: |
-        number=$(
-          gh pr list \
-              --base ${{ inputs.destination-branch }} \
-              --head ${{ inputs.source-branch }} \
-              --json number \
-              --jq .[0].number
-        )
-        gh pr edit ${number} --body-file /tmp/body.txt
+      uses: actions/github-script@v9
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+        BODY: ${{ steps.description.outputs.titles }}
+        SOURCE_BRANCH: ${{ inputs.source-branch }}
+        DESTINATION_BRANCH: ${{ inputs.destination-branch }}
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const { data: prs } = await github.rest.pulls.list({
+            ...context.repo,
+            base: process.env.DESTINATION_BRANCH,
+            head: `${context.repo.owner}:${process.env.SOURCE_BRANCH}`,
+            state: 'open',
+          })
+          if (prs.length === 0) {
+            core.setFailed('release PR not found')
+            return
+          }
+          const pr = prs[0]
+
+          // Keep task list items checked in the current body
+          const reTask = /^(\s*[-*+] )\[([ xX])\] (.*)$/
+          const checked = new Set()
+          for (const line of (pr.body || '').split(/\r?\n/)) {
+            const m = line.match(reTask)
+            if (m && m[2] !== ' ') {
+              checked.add(m[3])
+            }
+          }
+          const body = process.env.BODY.split('\n')
+            .map((line) => {
+              const m = line.match(reTask)
+              return m && checked.has(m[3]) ? `${m[1]}[x] ${m[3]}` : line
+            })
+            .join('\n')
+
+          await github.rest.pulls.update({
+            ...context.repo,
+            pull_number: pr.number,
+            body,
+          })
