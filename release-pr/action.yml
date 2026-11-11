@@ -19,6 +19,13 @@ inputs:
       Task list items (e.g. "* [ ] #{number}") checked in the current PR body are kept checked
       when the body is updated. Lines are matched by the text after the checkbox.
     default: "* #{number}"
+  bot-format:
+    description: |
+      Format of each PR line authored by bots (e.g. "* #{number}" to exclude them from the task list).
+      If not set, format is used.
+  bots:
+    description: |
+      Comma or newline separated authors treated as bots in addition to the ones with "[bot]" suffix.
   github-token:
     description: GitHub token used to open PR
     default: ${{ github.token }}
@@ -61,6 +68,8 @@ runs:
         from: origin/${{ inputs.destination-branch }}
         to: origin/${{ inputs.source-branch }}
         format: ${{ inputs.format }}
+        bot-format: ${{ inputs.bot-format }}
+        bots: ${{ inputs.bots }}
         reverse: true
         github-token: ${{ inputs.github-token }}
     - name: List team member
