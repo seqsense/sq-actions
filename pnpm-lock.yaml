@@ -174,8 +174,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@10.13.0)
       '@types/node':
-        specifier: 24.19.2
-        version: 24.19.2
+        specifier: 24.19.4
+        version: 24.19.4
       '@vercel/ncc':
         specifier: 0.45.0
         version: 0.45.0
@@ -294,8 +294,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@24.19.2':
-    resolution: {integrity: sha512-93d49wCWJkCyN87MxLpNN6KXPCwFw7bVUg79mGUV1OS40JGWwVCr8n61DXCSqz7CV6/VfPkb7xec7uP2M+QHWQ==}
+  '@types/node@24.19.4':
+    resolution: {integrity: sha512-s04odlR3ksJrLu7QLi+pddkWLD0RmSbcP9KuWn2/ozQKAp/YgwBC/6x9kJj8yAzZnGPfxePm7zm7nysVPCRagw==}
 
   '@vercel/ncc@0.45.0':
     resolution: {integrity: sha512-8zPi1yO2mHpoKTD+e+Bf0ZT3e+sWHSOyGapm9s7b5R0gxJi3CiFTqmeQiMEyu6ejrz2s09M8JkEoUaTWjBJPQQ==}
@@ -645,7 +645,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@24.19.2':
+  '@types/node@24.19.4':
     dependencies:
       undici-types: 7.24.6
 
